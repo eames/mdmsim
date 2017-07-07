@@ -1,0 +1,19 @@
+{
+  "interactive"   : true,
+  "macroName"     : "run.mac",
+  "processNumber" : 0,
+  "qValue"        : 9.14,
+  "target"        : [3,6],
+  "lightProduct"  : [1,2],
+  "heavyProduct"  : [12,26],
+  "IsChamber"     : true,
+  "stageFile"     : "/hdfs/user/hjayatissa/geant_mdm_csi/stage1/MDM_0.root",
+  "driftVelocity1": 11.8656980039,
+  "driftTimeRes1" : 35.9251590204,
+  "driftPosRes1"  : 0.03815218240,
+  "driftVelocity2": 40.0852765984,
+  "driftTimeRes2" : 6.93844358088,
+  "driftPosRes2"  : 0.03233854811,
+  "workFunction"  : 10.56,
+  "fanoFactor"    : 0.2
+}

@@ -1,0 +1,13 @@
+{
+  "useKinematics"    : true,
+  "beamEnergy"       : 71.09,
+  "qValue"           : 0.0,
+  "excitationEnergy" : 0.0,
+  "mdmAngle"         : 4.95,
+  "mdmDipoleField"   : 6220.0,
+  "targetMass"       : 197.0,
+  "projectileMass"   : 6.0,
+  "scatteredMass"    : 6.0,
+  "scatteredCharge"  : 3.0,
+  "scatteredAngles"  : [1.95,3.42,4.185,4.95,5.715,6.48,7.95]
+}
