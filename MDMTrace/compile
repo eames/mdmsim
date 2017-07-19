@@ -1,6 +1,10 @@
-gfortran -c -fPIC -finit-local-zero -falign-commons -fno-automatic RAYTKIN1.F
-g++ -c -fPIC MDMTrace.cpp
-g++ -shared -fPIC -Wl,-soname,libMDMTrace.so.1 -o libMDMTrace.so.1 MDMTrace.o RAYTKIN1.o -lc -lgfortran
+#!/bin/bash
+
+gfortran -c -fPIC -finit-local-zero -falign-commons -fno-automatic src/RAYTKIN1.F
+c++ -c -fPIC -I${PWD}/include src/MDMTrace.cpp
+c++ -c -fPIC -I${PWD}/include src/jsoncpp.cpp
+c++ -shared -fPIC -I${PWD}/include -Wl,-soname,libMDMTrace.so.1 -o libMDMTrace.so.1 jsoncpp.o MDMTrace.o RAYTKIN1.o -lc -lgfortran
 rm -f *.o libMDMTrace.so
 ln -s libMDMTrace.so.1 libMDMTrace.so
-g++ -o mdmExample mdmExample.cpp -L . -lMDMTrace
+#c++ -o mdmExample src/mdmExample.cpp -L . -lMDMTrace
+c++ -o mdmTraceApp src/mdmTraceApp.cpp -I${PWD}/include -L${PWD} -lMDMTrace
