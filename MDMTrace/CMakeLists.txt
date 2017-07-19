@@ -44,7 +44,7 @@ target_link_libraries(mdmTraceApp MDMTrace) # ${ROOT_LIBRARIES}
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS mdmTraceApp DESTINATION $ENV{HOME}/install/bin)
-install(TARGETS MDMTrace DESTINATION $ENV{HOME}/install/lib)
+install(TARGETS mdmTraceApp DESTINATION ${CMAKE_INSTALL_PREFIX}/install/bin)
+install(TARGETS MDMTrace DESTINATION ${CMAKE_INSTALL_PREFIX}/lib)
 
 
