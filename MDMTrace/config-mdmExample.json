@@ -1,0 +1,12 @@
+// EXAMPLE CONFIG FILE FOR mdmExample.cpp
+// Sends 19F(9+) @10 MeV/A through the MDM,
+// at a variety of scattering angles
+{
+    "rayinFile"        : "../rayin-t4t.dat", // input RAYTRACE file
+    "mdmAngle"         : 0.0,    // mrad
+    "mdmDipoleField"   : 6095.4, // Gauss
+    "scatteredMass"    : 19.0,   // AMU
+    "scatteredCharge"  : 9.0,    // Charge number
+    "scatteredEnergy"  : 190.0,  // MeV
+    "scatteredAngles"  : [-1.45,-1.2,-0.9,-0.6,-0.3,0.0,0.3,0.6,0.9,1.2,1.45] // mrad
+}
