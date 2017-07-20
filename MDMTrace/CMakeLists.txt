@@ -37,7 +37,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/RAYTKIN1.F)
 list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmTraceApp.cpp")
 list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmExample.cpp")
-list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmTrace_nptool.cpp")
+list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmNptool.cpp")
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h ${PROJECT_SOURCE_DIR}/analysis/include/json/*.h)
 
 
@@ -47,10 +47,10 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h ${PROJECT_SOURCE_DIR}/analys
 add_library(MDMTrace SHARED ${sources} ${headers})
 add_executable(mdmExample ${PROJECT_SOURCE_DIR}/src/mdmExample.cpp)
 add_executable(mdmTraceApp ${PROJECT_SOURCE_DIR}/src/mdmTraceApp.cpp)
-add_executable(mdmTrace_nptool ${PROJECT_SOURCE_DIR}/src/mdmTrace_nptool.cpp)
+add_executable(mdmNptool ${PROJECT_SOURCE_DIR}/src/mdmNptool.cpp)
 target_link_libraries(mdmExample MDMTrace)
 target_link_libraries(mdmTraceApp MDMTrace)
-target_link_libraries(mdmTrace_nptool MDMTrace ${ROOT_LIBRARIES} ${NPTOOL_LIBS})
+target_link_libraries(mdmNptool MDMTrace ${ROOT_LIBRARIES} ${NPTOOL_LIBS})
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
