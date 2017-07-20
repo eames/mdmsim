@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-//#include "MDMTrace.h"
-#include "/home/shuyaota/MDMTrace/include/MDMTrace.h"
+#include "MDMTrace.h"
 
 int main() {
   //Get Global Instance
