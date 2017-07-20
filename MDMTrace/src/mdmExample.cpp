@@ -1,13 +1,123 @@
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
+#include "json/json.h"
 #include "MDMTrace.h"
+#include "Rayin.h"
 
-int main() {
-  //Get Global Instance
+
+// Example program to propagate a defined ray through
+// the MDM.
+//
+// Reads inputs from a json config file. See the example
+// config-mdmExample.json 
+//
+int main(int argc, char* argv[]) {
+
+	// Check for correct arguments
+  if(argc<2) {
+    std::cout << "Usage: mdmTrace config-file" << std::endl;
+    return 0;
+  }
+
+  Json::Value config;
+  std::string configFileName = argv[1];
+  std::ifstream configStream(configFileName.c_str());
+  configStream >> config;
+  configStream.close();
+
+	// Create link to rayin.dat file
+	// NOTE:: Must come before the first call to
+	// MDMTrace::Instance()
+	Json::Value::iterator itRay = config.begin();
+	while(itRay != config.end()) {
+		if (itRay.key().asString() == "rayinFile"){ // RAYTRACE FILE
+			break;
+		}
+		++itRay;
+	}
+	if(itRay == config.end()) {
+		std::cerr << "ERROR: \"rayinFile\" not set in \"" << argv[1] << "\"\n";
+		exit(1);
+	}
+	Rayin rayin_(itRay->asString());
+
+	
+  //Get Global MDM Instance
   MDMTrace* mdm = MDMTrace::Instance();
 
+	std::vector<double> scatteredAngles;
+	//Read from config file
+	for(Json::Value::iterator it = config.begin();it!=config.end();it++) {
+		if (false) { // DUMMY - AESTHETICS ONLY
+		}
+		else if (it.key().asString() == "mdmAngle") {       // MDM ANGLE [mrad]
+			mdm->SetMDMAngle(it->asDouble());
+			printf("SET: %20s -- %.3f\n","MDM Angle",mdm->GetMDMAngle());
+		}
+		else if (it.key().asString() == "mdmDipoleField") { // MDM FIELD [kG cm]
+			mdm->SetMDMDipoleField(it->asDouble());
+			printf("SET: %20s -- %.3f\n","MDM Dipole Field",mdm->GetMDMDipoleField());
+		}
+		else if (it.key().asString() == "scatteredMass") {  // ION MASS [AMU]
+      mdm->SetScatteredMass(it->asDouble());
+      printf("SET: %20s -- %.3f\n","Scattered Mass",mdm->GetScatteredMass());
+		}
+		else if(it.key().asString() == "scatteredCharge") { // ION CHARGE STATE [e+ charge]
+			mdm->SetScatteredCharge(it->asDouble());
+      printf("SET: %20s -- %.3f\n","Scattered Charge",mdm->GetScatteredCharge());
+    }
+		else if(it.key().asString() == "scatteredEnergy") { // ION ENERGY [MeV]
+      mdm->SetScatteredEnergy(it->asDouble());
+      printf("SET: %20s -- %.3f\n","Scattered Energy",mdm->GetScatteredEnergy());
+    }
+		else if(it.key().asString() == "scatteredAngles") { // ION ANGLES [mrad]
+      for(unsigned int i = 0;i<it->size();i++) {
+				scatteredAngles.push_back((*it)[i].asDouble());
+      }
+      printf("SET: %20s -- ","Scattered Angles");
+      for(unsigned int i = 0;i<scatteredAngles.size();i++) {
+				printf("%.3f ",scatteredAngles[i]);
+      } printf("\n");
+		}
+	}
+
+	for (const auto& angle : scatteredAngles) {
+		mdm->SetScatteredAngle(angle);
+		mdm->SendRay();
+    double x1,x2,x3,x4,a1;
+    mdm->GetOxfordWirePositions(a1,x1,x2,x3,x4);
+		//
+    printf("Initial Angle: %8.2f\t W1Angle: %8.2f\t 1: %5.4f\t 2: %5.4f\t 3: %5.4f\t 4: %5.4f\n",
+					 angle,a1,x1,x2,x3,x4);
+	}
+
+	return 0;
+}
+
+
+/////////////////////////////
+///// SHUYA'S OLD CODE //////
+/////////////////////////////
+
+#if 0		
+  for(int i=0;i<11;i++) {
+    mdm->SetScatteredAngle(angles[i]);  //ALWAYS
+    //mdm->SendRay();                     //WITHOUT KINEMATICS ONLY
+    mdm->SendRayWithKinematics();     //KINEMATICS ONLY *
+    double x1,x2,x3,x4,a1;
+//by Shuya 160712
+    mdm->GetOxfordWirePositions(a1,x1,x2,x3,x4);
+    //mdm->GetOxfordWirePositions(x1,x2,x3,x4);
+//by Shuya 160712
+    printf("Initial Angle: %8.2f\t W1Angle: %8.2f\t 1: %5.4f\t 2: %5.4f\t 3: %5.4f\t 4: %5.4f\n",angles[i],a1,x1,x2,x3,x4);
+    //printf("Initial Angle: %8.2f\t 1: %5.4f\t 2: %5.4f\t 3: %5.4f\t 4: %5.4f\n",angles[i],x1,x2,x3,x4);
+  }
+  return 0;
+}
+
   //Set MDM
-  double Brho =  727.7; // kG cm
+//  double Brho =  727.7; // kG cm
   //mdm->SetMDMAngle(              0.00);  //ALWAYS SET
   mdm->SetMDMAngle(              0.00);  //ALWAYS SET
 //by Shuya 160713. Inputs are in Gauss converted from Tm by 1000.0 * 1000.0 / 160.0.
@@ -312,5 +422,6 @@ int main() {
   return 0;
 }
 
-//positions in cm
-//angles in mrad
+// positions in cm
+// angles in mrad
+#endif

@@ -227,3 +227,16 @@ void MDMTrace::GetOxfordWirePositions(double& x1,double& x2,double& x3,double& x
   x3 = oxfordWire1Pos+tanAngle*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]);
   x4 = oxfordWire1Pos+tanAngle*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]+oxfordWireSpacing_[2]);
 }
+
+void MDMTrace::GetOxfordWirePositions(double& a1,double& x1,double& x2,double& x3,double& x4) {
+	double oxfordWire1Pos = blck2_.XO[0];
+	double oxfordWire1Ang = blck2_.VXO[0];
+	double tanAngle = tan(1e-3*oxfordWire1Ang);
+
+	a1 = oxfordWire1Ang;
+
+	x1 = oxfordWire1Pos;
+	x2 = oxfordWire1Pos+tanAngle*oxfordWireSpacing_[0];
+	x3 = oxfordWire1Pos+tanAngle*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]);
+	x4 = oxfordWire1Pos+tanAngle*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]+oxfordWireSpacing_[2]);
+} 
