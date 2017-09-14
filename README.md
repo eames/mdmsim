@@ -1,5 +1,7 @@
 MDMTrace and Oxford Sim files
 
+Note that everything currently used by the T4T collaboration
+is in the MDMTrace subdir.
 
 
 *** COMPILING MDM TRACE - RAYTRACE CODE ***
