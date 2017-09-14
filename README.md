@@ -25,3 +25,12 @@ entirely.
 > make
 > make install <<--- Optional: Copies library to ${CMAKE_INSTALL_PREFIX}/lib
                                and executable to ${CMAKE_INSTALL_PREFIX}/bin
+
+
+The main program you want to run to do a standard RAYTRACE calculation is
+mdmExample.  It takes a *.json config file as the input:
+
+> mdmExample config.json
+
+See the file config-mdmExample.json for an example. The comments in that file
+should tell you what all of the parameters are.
