@@ -27,7 +27,7 @@ set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
 
 ## Set up nptool
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I$ENV{NPTOOL}/NPLib/include")
-set (NPTOOL_LIBS "-L$ENV{NPTOOL}/NPLib/lib -lNPInitialConditions")
+set (NPTOOL_LIBS "-L$ENV{NPTOOL}/NPLib/lib -lNPInitialConditions -lNPTiara")
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -37,6 +37,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp ${PROJECT_SOURCE_DIR}/src/RAYTKIN1.F)
 list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmTraceApp.cpp")
 list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmExample.cpp")
+list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmExample1.cpp")
 list(REMOVE_ITEM sources "${PROJECT_SOURCE_DIR}/src/mdmNptool.cpp")
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h ${PROJECT_SOURCE_DIR}/analysis/include/json/*.h)
 
@@ -46,10 +47,12 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.h ${PROJECT_SOURCE_DIR}/analys
 #
 add_library(MDMTrace SHARED ${sources} ${headers})
 add_executable(mdmExample ${PROJECT_SOURCE_DIR}/src/mdmExample.cpp)
+add_executable(mdmExample1 ${PROJECT_SOURCE_DIR}/src/mdmExample1.cpp)
 add_executable(mdmTraceApp ${PROJECT_SOURCE_DIR}/src/mdmTraceApp.cpp)
 add_executable(mdmNptool ${PROJECT_SOURCE_DIR}/src/mdmNptool.cpp)
 target_link_libraries(mdmExample MDMTrace)
 target_link_libraries(mdmTraceApp MDMTrace)
+target_link_libraries(mdmExample1 MDMTrace  ${ROOT_LIBRARIES})
 target_link_libraries(mdmNptool MDMTrace ${ROOT_LIBRARIES} ${NPTOOL_LIBS})
 
 #----------------------------------------------------------------------------
