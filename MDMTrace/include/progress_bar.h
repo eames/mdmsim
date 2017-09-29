@@ -2,8 +2,8 @@
 
 void progress_bar(long long i, long long max)
 {
+	const int barWidth = 40;
 	float progress = (double)i / (double) max;
-	int barWidth = 70;
 
 	if(i == 0) { std::cout << "["; };
 	int pos = barWidth * progress;
