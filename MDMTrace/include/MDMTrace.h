@@ -35,6 +35,8 @@ class MDMTrace {
   void GetPositionAngleFirstWire(double&,double&,double&,double&) const;
   void GetOxfordWirePositions(double&,double&,double&,double&);
   void GetOxfordWirePositions(double&,double&,double&,double&,double&);
+  void GetOxfordWirePositions(double&,double&,double&,double&,double&,
+															double&,double&,double&,double&,double&);
  private:
   MDMTrace() {};
   static MDMTrace* instance_;

@@ -170,6 +170,13 @@ int main(int argc, char* argv[])
 	double incoming_angle_y;
 	double outcoming_angle;
 
+	double wire1_yPos;
+	double wire2_yPos;
+	double wire3_yPos;
+	double wire4_yPos;
+	double outcoming_angle_x;
+	double outcoming_angle_y;
+
 	vector<float> wire_xPos;
 	vector<float> wire_zPos = {2,17.1,33.4,49.7};
 
@@ -178,6 +185,14 @@ int main(int argc, char* argv[])
 	tree->Branch("wire2_xPos", &wire2_xPos,"wire2_xPos/D");
 	tree->Branch("wire3_xPos", &wire3_xPos,"wire3_xPos/D");
 	tree->Branch("wire4_xPos", &wire4_xPos,"wire4_xPos/D");
+	tree->Branch("outcoming_angle_x", &outcoming_angle_x,"outcoming_angle_x/D");
+
+	tree->Branch("wire1_yPos", &wire1_yPos,"wire1_yPos/D");
+	tree->Branch("wire2_yPos", &wire2_yPos,"wire2_yPos/D");
+	tree->Branch("wire3_yPos", &wire3_yPos,"wire3_yPos/D");
+	tree->Branch("wire4_yPos", &wire4_yPos,"wire4_yPos/D");
+	tree->Branch("outcoming_angle_y", &outcoming_angle_y,"outcoming_angle_y/D");
+
 	tree->Branch("energy", &energy,"energy/D");
 	tree->Branch("incoming_angle_x", &incoming_angle_x,"incoming_angle_x/D");
 	tree->Branch("incoming_angle_y", &incoming_angle_y,"incoming_angle_y/D");
@@ -236,17 +251,27 @@ int main(int argc, char* argv[])
 		mdm->SetScatteredEnergy(ekin);
 		mdm->SendRay();
 		double x1,x2,x3,x4,a1;
-		mdm->GetOxfordWirePositions(a1,x1,x2,x3,x4);
+		double y1,y2,y3,y4,b1;
+		mdm->GetOxfordWirePositions(a1,x1,x2,x3,x4,b1,y1,y2,y3,y4);
   
 		wire1_xPos = x1;
 		wire2_xPos = x2;
 		wire3_xPos = x3;
 		wire4_xPos = x4;
 		outcoming_angle = a1;
+		outcoming_angle_x = a1;
+
+		wire1_yPos = y1;
+		wire2_yPos = y2;
+		wire3_yPos = y3;
+		wire4_yPos = y4;
+		outcoming_angle_y = b1;
+
+
 		incoming_angle_x = raytrace_angle_x;
 		incoming_angle_y = raytrace_angle_y;
 		energy = ekin;
-
+		
 		wire_xPos.clear();
 		wire_xPos.push_back(x1);
 		wire_xPos.push_back(x2);

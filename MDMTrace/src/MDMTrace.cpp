@@ -240,3 +240,30 @@ void MDMTrace::GetOxfordWirePositions(double& a1,double& x1,double& x2,double& x
 	x3 = oxfordWire1Pos+tanAngle*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]);
 	x4 = oxfordWire1Pos+tanAngle*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]+oxfordWireSpacing_[2]);
 } 
+
+void MDMTrace::GetOxfordWirePositions(double& a1,double& x1,double& x2,double& x3,double& x4,
+																			double& b1,double& y1,double& y2,double& y3,double& y4) {
+	double oxfordWire1PosX = blck2_.XO[0];
+	double oxfordWire1AngX = blck2_.VXO[0]; // mrad
+	double tanAngleX = tan(1e-3*oxfordWire1AngX);
+
+	double oxfordWire1PosY = blck2_.YO[0];
+	double oxfordWire1AngY = blck2_.VYO[0]; // mrad
+	double tanAngleY = tan(1e-3*oxfordWire1AngY);
+
+	// x - plane //
+	a1 = oxfordWire1AngX; // mrad
+
+	x1 = oxfordWire1PosX;
+	x2 = oxfordWire1PosX+tanAngleX*oxfordWireSpacing_[0];
+	x3 = oxfordWire1PosX+tanAngleX*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]);
+	x4 = oxfordWire1PosX+tanAngleX*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]+oxfordWireSpacing_[2]);
+
+	// y - plane //
+	b1 = oxfordWire1AngY; // mrad
+
+	y1 = oxfordWire1PosY;
+	y2 = oxfordWire1PosY+tanAngleY*oxfordWireSpacing_[0];
+	y3 = oxfordWire1PosY+tanAngleY*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]);
+	y4 = oxfordWire1PosY+tanAngleY*(oxfordWireSpacing_[0]+oxfordWireSpacing_[1]+oxfordWireSpacing_[2]);
+} 
