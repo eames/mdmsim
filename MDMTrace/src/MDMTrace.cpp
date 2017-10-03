@@ -62,6 +62,10 @@ MDMTrace* MDMTrace::Instance() {
     kineblck_.TRGT1 = 0.;
     instance_->beamEnergy_ = 0;
     instance_->scatteredEnergy_ = 0;
+		instance_->beamPositions_[0] = 0.;
+		instance_->beamPositions_[1] = 0.;
+		instance_->beamPositions_[2] = 0.;
+
   }
   return instance_;
 }
@@ -120,6 +124,12 @@ void MDMTrace::SetScatteredAngle(double xAngle,double yAngle) {
   kineblck_.THETACAL[0] = xAngle;
   scatteredAngles_[0] = xAngle;
   scatteredAngles_[1] = yAngle;
+}
+
+void MDMTrace::SetBeamPosition(double x, double y, double z) {
+	beamPositions_[0] = x;
+	beamPositions_[1] = y;
+	beamPositions_[2] = z;
 }
 
 double MDMTrace::GetScatteredAngle() const {
@@ -195,9 +205,9 @@ void MDMTrace::SendRayWithKinematics() {
 void MDMTrace::SendRay() {
   int flag = 2;
   blck4_.ENERGY = scatteredEnergy_;
-  blck1_.XI[0]=0.;
-  blck1_.YI[0]=0.;
-  blck1_.ZI[0]=0.;
+  blck1_.XI[0]=beamPositions_[0];
+  blck1_.YI[0]=beamPositions_[1];
+  blck1_.ZI[0]=beamPositions_[2];
   blck1_.VXI[0]=17.453*(scatteredAngles_[0]-kineblck_.THTSPEC);
   blck1_.VYI[0]=17.453*(scatteredAngles_[1]);
   blck1_.VZI[0]=0.;

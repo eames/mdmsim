@@ -27,6 +27,7 @@ class MDMTrace {
   void SetScatteredMass(double);
   double GetScatteredMass() const;
   void SetScatteredCharge(double);
+	void SetBeamPosition(double,double,double);
   double GetScatteredCharge() const;
   double GetEnergyAfterKinematics() const;
   void SendRayWithKinematics();
@@ -45,6 +46,7 @@ class MDMTrace {
   double beamEnergy_;
   double scatteredEnergy_;
   double scatteredAngles_[2];
+  double beamPositions_[3];
 };
 
 #endif
