@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include "json/json.h"
 #include "MDMTrace.h"
 #include "Rayin.h"
@@ -23,6 +24,7 @@
 
 //other
 #include "progress_bar.h"
+#include "elements.h"
 
 // Example program to propagate a defined ray through
 // the MDM.
@@ -74,8 +76,6 @@ int main(int argc, char* argv[])
 	//Get Global MDM Instance
 	MDMTrace* mdm = MDMTrace::Instance();
 
-	std::string scatteredParticle = "F20"; // gets re-set
-	std::vector<double> scatteredAngles;
 	//Read from config file
 	for(Json::Value::iterator it = config.begin();it!=config.end();it++) 
 	{
@@ -107,29 +107,21 @@ int main(int argc, char* argv[])
 			mdm->SetScatteredEnergy(it->asDouble());
 			printf("SET: %20s -- %.3f\n","Scattered Energy",mdm->GetScatteredEnergy());
 		}
-		else if(it.key().asString() == "scatteredParticle")
-		{
-			// PARTICLE NAME [from nptool] -> e.g. O14, F20, etc.
-			scatteredParticle = it->asString();
-			printf("SET: %20s -- %s\n","Scattered Particle", scatteredParticle.c_str());
-		}
-		else if(it.key().asString() == "scatteredAngles") 
-		{ // ION ANGLES [mrad]
-			for(unsigned int i = 0;i<it->size();i++) 
-			{
-				scatteredAngles.push_back((*it)[i].asDouble());
-			}
-			printf("SET: %20s -- ","Scattered Angles");
-			for(unsigned int i = 0;i<scatteredAngles.size();i++) 
-			{
-				printf("%.3f ",scatteredAngles[i]);
-			} 
-			printf("\n");
-		}
 	}
 
-
-//	std::string nptoolFile = "/home/sdede/packages/nptool/Outputs/Simulation/T40.root";
+	// figure out name of scattered particle //
+	std::string scatteredParticle;
+	{
+		std::stringstream ss;
+		try {
+			ss << get_element_vector().at(mdm->GetScatteredCharge()) << round(mdm->GetScatteredMass());
+		} catch(std::exception& e) {
+			std::cerr << "ERROR: Invalid charge " << mdm->GetScatteredCharge() << "\n";
+			exit(1);
+		}
+		scatteredParticle = ss.str();
+		printf("SET: %20s -- %s\n","Scattered Particle", scatteredParticle.c_str());
+	}	
 
 	TFile* fileSim = TFile::Open(nptoolFile.c_str()); // Open simulation ROOT file
 	if(!fileSim)
