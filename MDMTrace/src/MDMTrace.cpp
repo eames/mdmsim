@@ -114,19 +114,19 @@ double MDMTrace::GetMDMDipoleField() const {
   return blck0_.DATA[4][14]*1.e4;
 }
 
-void MDMTrace::SetScatteredAngle(double angle) {
+void MDMTrace::SetScatteredAngle(double angle) { // degrees
   kineblck_.THETACAL[0] = angle;
   scatteredAngles_[0] = angle;
   scatteredAngles_[1] = 0.;
 }
 
-void MDMTrace::SetScatteredAngle(double xAngle,double yAngle) {
+void MDMTrace::SetScatteredAngle(double xAngle,double yAngle) { // degrees
   kineblck_.THETACAL[0] = xAngle;
   scatteredAngles_[0] = xAngle;
   scatteredAngles_[1] = yAngle;
 }
 
-void MDMTrace::SetBeamPosition(double x, double y, double z) {
+void MDMTrace::SetBeamPosition(double x, double y, double z) { // cm
 	beamPositions_[0] = x;
 	beamPositions_[1] = y;
 	beamPositions_[2] = z;

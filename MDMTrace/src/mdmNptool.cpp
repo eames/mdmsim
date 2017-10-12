@@ -177,6 +177,8 @@ int main(int argc, char* argv[])
 	double outcoming_angle_x;
 	double outcoming_angle_y;
 
+	double posx,posy,posz;
+	
 	vector<float> wire_xPos;
 	vector<float> wire_zPos = {2,17.1,33.4,49.7};
 
@@ -198,6 +200,10 @@ int main(int argc, char* argv[])
 	tree->Branch("incoming_angle_y", &incoming_angle_y,"incoming_angle_y/D");
 	tree->Branch("outcoming_angle", &outcoming_angle,"outcoming_angle/D");
 
+	tree->Branch("incoming_pos_x", &posx, "incoming_pos_x/D");
+	tree->Branch("incoming_pos_y", &posy, "incoming_pos_y/D");
+	tree->Branch("incoming_pos_z", &posz, "incoming_pos_z/D");
+	
 	tree->Branch("wire_xPos", &wire_xPos);
 	tree->Branch("wire_zPos", &wire_zPos);
 
@@ -242,13 +248,18 @@ int main(int argc, char* argv[])
 		double angle_y = atan( direction.Y() / direction.Z());
 		double raytrace_angle_x = angle_x*180/3.14159; //degrees
 		double raytrace_angle_y = angle_y*180/3.14159; //degrees
-
+		posx = ic->GetIncidentPositionX();
+		posy = ic->GetIncidentPositionY();
+		posz = ic->GetIncidentPositionZ();
+		
+		
 		//cout << raytrace_angle <<"\t";
 		//double raytrace_angle = angle/1000; //(mrad)
 		
 		mdm->SetScatteredAngle(raytrace_angle_x,raytrace_angle_y); //angle must be in degrees!
 //		mdm->SetScatteredAngle(raytrace_angle_x); //angle must be in degrees!
 		mdm->SetScatteredEnergy(ekin);
+		mdm->SetBeamPosition(posx, posy, posz);
 		mdm->SendRay();
 		double x1,x2,x3,x4,a1;
 		double y1,y2,y3,y4,b1;
