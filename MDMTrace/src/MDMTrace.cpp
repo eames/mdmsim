@@ -11,6 +11,7 @@ extern "C" {
     double ITITLE[200];
   } blck0_;
 
+// incoming beam parameters
   extern struct {
     double XI[1000];
     double YI[1000];
@@ -21,6 +22,7 @@ extern "C" {
     double DELP[1000];
   } blck1_;
 
+// post-magnet parameters
   extern struct {
     double XO[1000];
     double YO[1000];
@@ -32,6 +34,7 @@ extern "C" {
     double RLL[1000];
   } blck2_;
 
+// "scattered ray" parameters
   extern struct {
     double ENERGY;
     double VEL;
@@ -39,6 +42,7 @@ extern "C" {
     double Q0;
   } blck4_;
 
+// "kinematics parameters"
   extern struct {
     double THTSPEC;
     double TRGT1;

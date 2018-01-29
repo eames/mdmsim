@@ -1,13 +1,34 @@
 {
-  "useKinematics"    : true,
-  "beamEnergy"       : 71.09,
-  "qValue"           : 0.0,
-  "excitationEnergy" : 0.0,
-  "mdmAngle"         : 4.95,
-  "mdmDipoleField"   : 6220.0,
-  "targetMass"       : 197.0,
-  "projectileMass"   : 6.0,
-  "scatteredMass"    : 6.0,
-  "scatteredCharge"  : 3.0,
-  "scatteredAngles"  : [1.95,3.42,4.185,4.95,5.715,6.48,7.95]
+  "useKinematics"    : true,   // use reaction kinematics (true / false)
+  "beamEnergy"       : 71.09,  // energy of beam in MeV
+  "qValue"           : 0.0,    // q-value of reaction (ignored if useKinematics == false)
+  "excitationEnergy" : 0.0,    // excitation energy of reaction product (ignored if kinematics == false)
+  "mdmAngle"         : 0.0,    // angle of MDM spectrometer relative to beam-center (mrad)
+  "mdmDipoleField"   : 6220.0, // field of MDM dipole (Gauss)
+  "targetMass"       : 197.0,  // mass of target (ignored if kinematics == false)
+  "projectileMass"   : 6.0,    // mass of beam in AMU
+  "scatteredMass"    : 6.0,    // mass of reaction product in AMU (ignored if kinematics == false)
+  "scatteredCharge"  : 3.0,    // charge of reaction product in AMU (ignored if kinematics == false)
+  "scatteredAngles"  : [1.95,3.42,4.185,4.95,5.715,6.48,7.95]  // range of scattered angles in DEGREES
 }
+
+
+// WHAT TO SET //
+//
+// ALWAYS
+//     -> mdmAngle [MRAD]
+//     -> mdmDipoleField [GAUSS]
+//
+// if: useKinematics == true
+//     -> beamEnergy [MeV]
+//     -> qValue     [MeV]
+//     -> excitationEnergy [MeV]
+//     -> targetMass [AMU]
+//     -> projectileMass  [AMU]
+//     -> scatteredMass   [AMU]
+//     -> scatteredCharge [AMU]
+//     -> scatteredAngles [MRAD]
+//
+// if: useKinematics == false
+//     -> scatteredAngles [DEG]
+//     -> scatteredEnergy [MeV]

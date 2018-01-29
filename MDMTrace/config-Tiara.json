@@ -1,0 +1,24 @@
+// EXAMPLE CONFIG FILE FOR TIARA
+{
+// ALWAYS
+    "rayinFile"        : "../rayin-t4t.dat", // input RAYTRACE file
+    "mdmAngle"         : 0.0,    // MDM angle in degrees
+    "mdmDipoleField"   : 6095.4, // MDM field in Gauss
+    "useKinematics"    : true,   // use reaction kinematics (true/false)
+// useKinematics == true
+    "beamEnergy"       : 190.0,   // incoming beam energy, MeV
+    "projectileMass"   : 19.0,    // incoming beam mass, AMU
+    "targetMass"       : 2.01355, // target mass, AMU
+    "qValue"           : 4.3768,  // reaction q-Value to the GROUND STATE, MeV
+    "excitationEnergy" : 0.656,   // extitation energy of reaction product, MeV
+// useKinematics == false
+    "scatteredEnergy"  : 190.0,   // input ray energy, MeV
+// ALWAYS
+    "scatteredMass"    : 19.0,    // WITH kinematics: reaction product mass, AMU
+                                  // WITHOUT kinematics: input ray mass, AMU
+    "scatteredCharge"  : 9.0,     // WITH kinematics: reaction product charge, (elementary charge)
+                                  // WITHOUT kinematics: input ray charge, (elementary charge)
+    "scatteredAngles"  : [-1.45,-1.2,-0.9,-0.6,-0.3,0.0,0.3,0.6,0.9,1.2,1.45]
+                                  // ^^ WITH kinematics: angle of reaction products, deg
+                                  // ^^ WITHOUT kinematics: angle of input ray, deg
+}
