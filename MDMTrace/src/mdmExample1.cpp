@@ -9,7 +9,6 @@
 #include <string>
 #include <TTree.h>
 #include <TFile.h>
-#include <TInitialConditions.h>
 #include <vector>
 
 
@@ -19,6 +18,8 @@
 #include "TProfile.h"
 #include "TRandom.h"
 #include "TCanvas.h"
+
+using namespace std;
 
 // Example program to propagate a defined ray through
 // the MDM.
