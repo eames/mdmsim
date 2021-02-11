@@ -22,3 +22,21 @@
                                   // ^^ WITH kinematics: angle of reaction products, deg
                                   // ^^ WITHOUT kinematics: angle of input ray, deg
 }
+// OPTIONAL ARGUMENTS
+//
+// "outputFile" : "blah.dat",
+// Writes output to specified file. Written is:
+// input angle/deg, Energy/MeV, Output Angle/mrad, W1/cm, W2/cm, W3/cm, W4/cm
+// (whitespace delimited). If not specified, no output file is written.
+// Regardless, results are always printed to screen.
+//
+// "scatteredEnergies" : [620., 630., 640., 650., 660., 670., 680.],
+// Sets a RANGE of scattered energies, rather than just a single
+// value. ONLY USED if useKinematics=False. If you specify this,
+// "beamEnergy" becomes ignored.
+//
+// "mdmEntranceMultipoleField" : 5208.0,
+// Sets entrance multipole field in Gauss. If not specified, the
+// default scaling (from the dipole field) is used.
+// Note that the default scaling is 0.71*(mdmDipoleField/1.034), i.e.
+// 0.71 times the MEASURED (in the lab) HP value.
