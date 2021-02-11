@@ -96,8 +96,17 @@ void MDMTrace::SetMDMBRho(double bRho) {
 }
 
 void MDMTrace::SetMDMDipoleField(double field) {
-  double hallProbe = field/1.034;
-  double multipoleHallProbe = hallProbe*0.71;
+	// Automatically scale entrance miltipole as we
+	// are supposed to 
+  double hallProbe = field/1.034; // convert to "HP value" (as set in experiment)
+  double multipoleHallProbe = hallProbe*0.71; // convert to properly scaled MP Hall Probe
+	SetMDMDipoleMultipoleField(field, multipoleHallProbe);
+}
+
+void MDMTrace::SetMDMDipoleMultipoleField(double field, double multipoleHallProbe) {
+	// Sets Multipole HP manually
+	double hallProbe = field/1.034;
+  // double multipoleHallProbe = hallProbe*0.71;
   std::cout << "CONFIRM: Hall probe for dipole should be set to " << hallProbe << std::endl;
   std::cout << "CONFIRM: Hall probe for multipole should be set to " << multipoleHallProbe << std::endl;
   double BQR = -1.*multipoleHallProbe*1e-4*jeffParams_[5];

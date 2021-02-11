@@ -10,6 +10,7 @@ class MDMTrace {
   double GetMDMAngle() const;
   void SetMDMBRho(double);
   void SetMDMDipoleField(double);
+	void SetMDMDipoleMultipoleField(double,double);
   double GetMDMDipoleField() const;
   void SetScatteredAngle(double);
   void SetScatteredAngle(double,double);

@@ -46,19 +46,23 @@ int main(int argc, char* argv[]) {
   //Get Global MDM Instance
   MDMTrace* mdm = MDMTrace::Instance();
 
-	std::vector<double> scatteredAngles;
+	std::ofstream outputFile;
+	std::vector<double> scatteredAngles, beamEnergies;
+	double dipoleField = -1, multipoleField = -1;
 	//Read from config file
 	bool useKinematics = false;
 	for(Json::Value::iterator it = config.begin();it!=config.end();it++) {
 		if (false) { // DUMMY - AESTHETICS ONLY
-		}
-		else if (it.key().asString() == "mdmAngle") {       // MDM ANGLE [degrees]
+		} else if (it.key().asString() == "mdmAngle") {       // MDM ANGLE [degrees]
 			mdm->SetMDMAngle(it->asDouble());
 			printf("SET: %20s -- %.3f\n","MDM Angle [deg]",mdm->GetMDMAngle());
-		}
-		else if (it.key().asString() == "mdmDipoleField") { // MDM FIELD [G]
-			mdm->SetMDMDipoleField(it->asDouble());
-			printf("SET: %20s -- %.3f\n","MDM Dipole Field [G]",mdm->GetMDMDipoleField());
+		} else if (it.key().asString() == "mdmDipoleField") { // MDM FIELD [G]
+			// mdm->SetMDMDipoleField(it->asDouble());
+			dipoleField = it->asDouble();
+			printf("SET: %20s -- %.3f\n","MDM Dipole Field [G]",dipoleField);
+		} else if(it.key().asString() == "mdmEntranceMultipoleField") { // MULTIPOLS FIELD
+			multipoleField = it->asDouble();
+			printf("SET: %20s -- %.3f\n","MDM Dipole Field [G]",multipoleField);
 		} else if(it.key().asString() == "targetMass") {
       mdm->SetTargetMass(it->asDouble());
       printf("SET: %20s -- %.3f\n","Target Mass [amu]",mdm->GetTargetMass());
@@ -85,6 +89,15 @@ int main(int argc, char* argv[]) {
       mdm->SetScatteredEnergy(it->asDouble());
       printf("SET: %20s -- %.3f\n","Scattered Energy [MeV]",mdm->GetScatteredEnergy());
     }
+		else if(it.key().asString() == "scatteredEnergies") { // ION ANGLES [deg]
+      for(unsigned int i = 0;i<it->size();i++) {
+				beamEnergies.push_back((*it)[i].asDouble());
+      }
+      printf("SET: %20s -- ","Scattered Angles [deg]");
+      for(unsigned int i = 0;i<scatteredAngles.size();i++) {
+				printf("%.3f ",scatteredAngles[i]);
+      } printf("\n");
+		}
 		else if(it.key().asString() == "scatteredAngles") { // ION ANGLES [deg]
       for(unsigned int i = 0;i<it->size();i++) {
 				scatteredAngles.push_back((*it)[i].asDouble());
@@ -93,7 +106,8 @@ int main(int argc, char* argv[]) {
       for(unsigned int i = 0;i<scatteredAngles.size();i++) {
 				printf("%.3f ",scatteredAngles[i]);
       } printf("\n");
-		} else if(it.key().asString() == "useKinematics") {
+		}
+		else if(it.key().asString() == "useKinematics") {
       useKinematics = it->asBool();
       if(useKinematics) {
 				printf("Calling MDMTrace with kinematics...\n");
@@ -101,27 +115,66 @@ int main(int argc, char* argv[]) {
 				printf("Calling MDMTrace without kinematics...\n");
       }
     }
-	}
-	for (const auto& angle : scatteredAngles) {
-		mdm->SetScatteredAngle(angle);
-		
-		if(useKinematics)
-		{
-			mdm->SendRayWithKinematics();
+		else if(it.key().asString() == "outputFile") {
+			printf("Saving output to file: \"%s\"\n", it->asString().c_str());
+			outputFile.open(it->asString().c_str(), std::ofstream::out);
+			outputFile << "anglein:energy:angleout:x1:x2:x3:x4/D" << std::endl;
 		}
-		else
-		{
-			mdm->SendRay();
-		}
-		
-    double x1,x2,x3,x4,a1;
-    mdm->GetOxfordWirePositions(a1,x1,x2,x3,x4);
-		//
-		double energy = (useKinematics) ? mdm->GetEnergyAfterKinematics() : mdm->GetScatteredEnergy();
-    printf("Initial Angle: %8.2f\t Energy: %8.2f\t W1Angle: %8.2f\t 1: %5.4f\t 2: %5.4f\t 3: %5.4f\t 4: %5.4f\n",
-					 angle,energy,a1,x1,x2,x3,x4);
 	}
-
+	// Set field values
+	if(dipoleField < 0){
+		std::cerr << "ERROR: Dipole field not set!\n";
+		exit(1);
+	}
+	if(multipoleField < 0){
+		std::cout << "Using standard scaling for entrance multipole field...\n";
+		mdm->SetMDMDipoleField(dipoleField);
+	} else {
+		std::cout << "Using manual value for entrance multipole field...\n";
+		mdm->SetMDMDipoleMultipoleField(dipoleField, multipoleField);
+	}
+	auto get_and_print =
+		[&](double angle){
+			double x1,x2,x3,x4,a1;
+			mdm->GetOxfordWirePositions(a1,x1,x2,x3,x4);
+			//
+			double energy = (useKinematics) ? mdm->GetEnergyAfterKinematics() :
+				mdm->GetScatteredEnergy();
+			printf("Initial Angle/deg: %8.2f\t Energy/MeV: %8.2f\t W1Angle/mrad:"
+						 " %8.2f\t Wire Pos/cm: 1: %5.4f\t 2: %5.4f\t 3: %5.4f\t 4: %5.4f\n",
+						 angle,energy,a1,x1,x2,x3,x4);
+			if(outputFile.is_open()){
+				char buf[4096];
+				sprintf(buf, "%8.2f\t %8.2f\t %8.2f\t %5.4f\t %5.4f\t %5.4f\t %5.4f",
+								angle,energy,a1,x1,x2,x3,x4);
+				outputFile << buf << std::endl;
+			}
+		};
+	
+	if(beamEnergies.empty()) {
+		for (const auto& angle : scatteredAngles) {
+			mdm->SetScatteredAngle(angle);
+		
+			if(useKinematics)
+			{
+				mdm->SendRayWithKinematics();
+			}
+			else
+			{
+				mdm->SendRay();
+			}
+			get_and_print(angle);
+		}
+	} else {
+		for (const auto& energy : beamEnergies) {
+			mdm->SetScatteredEnergy(energy);
+			for (const auto& angle : scatteredAngles) {
+				mdm->SetScatteredAngle(angle);
+				mdm->SendRay();
+				get_and_print(angle);
+			}
+		}
+	}
 	return 0;
 }
 
